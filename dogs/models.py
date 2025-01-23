@@ -54,16 +54,18 @@ class Breed(models.Model):
         using=None,
         update_fields=None,
     ):
-        attrs_to_check = (
-            {"friendliness": self.friendliness,
+        attrs_to_check = {
+            "friendliness": self.friendliness,
             "trainability": self.trainability,
             "shedding_amount": self.shedding_amount,
-            "exercise_needs": self.exercise_needs,}
-        )
+            "exercise_needs": self.exercise_needs,
+        }
         approved_values = (1, 2, 3, 4, 5)
         for attr_name, attr_value in attrs_to_check.items():
             if attr_value not in approved_values:
-                raise ValidationError(f"The {attr_name} of a breed may differ from 1 to 5")
+                raise ValidationError(
+                    f"The {attr_name} of a breed may differ from 1 to 5"
+                )
         super().save(
             *args,
             force_insert=force_insert,
