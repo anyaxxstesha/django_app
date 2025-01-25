@@ -5,6 +5,8 @@ from dogs.models import Breed, Dog
 
 @admin.register(Breed)
 class BreedAdmin(admin.ModelAdmin):
+    """Breed admin model."""
+
     list_display = (
         "pk",
         "name",
@@ -23,6 +25,8 @@ class BreedAdmin(admin.ModelAdmin):
 
 @admin.register(Dog)
 class DogAdmin(admin.ModelAdmin):
+    """Dog admin model."""
+
     list_display = (
         "pk",
         "name",
