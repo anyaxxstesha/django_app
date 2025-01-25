@@ -1,0 +1,44 @@
+services:
+  db:
+    container_name: db
+    image: postgres:16-alpine
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - django_project:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    tty: true
+    command: sh -c "python manage.py migrate && gunicorn -w $(( $(nproc)*2+1 )) -b 0.0.0.0:5000 config.wsgi"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  nginx:
+    container_name: nginx
+    tty: true
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: on-failure
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+
+volumes:
+  django_project:
+    driver: local
