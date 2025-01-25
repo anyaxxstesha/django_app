@@ -12,9 +12,14 @@ from dogs.serializers import (
 
 
 class BreedViewSet(ModelViewSet):
-    queryset = Breed.objects.all()
+    """API endpoint for managing breeds."""
 
     def get_queryset(self):
+        """Method to get queryset.
+
+        Returns:
+            queryset of Breed objects.
+        """
         if self.action == "list":
             return Breed.objects.annotate(
                 dogs_amount=Coalesce(
@@ -30,14 +35,25 @@ class BreedViewSet(ModelViewSet):
         return Breed.objects.all()
 
     def get_serializer_class(self):
+        """Method to get the serializer class.
+
+        Returns:
+            serializer class for Breed objects.
+        """
         if self.action == "list":
             return BreedListSerializer
         return BreedSerializer
 
 
 class DogViewSet(ModelViewSet):
+    """API endpoint for managing dogs."""
 
     def get_queryset(self):
+        """Method to get queryset.
+
+        Returns:
+            queryset of Dog objects.
+        """
         if self.action == "list":
             return Dog.objects.annotate(
                 avg_breed_age=Subquery(
@@ -60,6 +76,11 @@ class DogViewSet(ModelViewSet):
         return Dog.objects.all()
 
     def get_serializer_class(self):
+        """Method to get the serializer class.
+
+        Returns:
+            serializer class for Dog objects.
+        """
         if self.action == "list":
             return DogListSerializer
         if self.action == "retrieve":

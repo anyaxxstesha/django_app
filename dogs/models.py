@@ -5,6 +5,8 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class Breed(models.Model):
+    """Model representing Breed."""
+
     SIZE_CHOICES = (
         ("XS", "Tiny"),
         ("S", "Small"),
@@ -54,6 +56,19 @@ class Breed(models.Model):
         using=None,
         update_fields=None,
     ):
+        """Save method with validation to check attributes before saving.
+
+        Args:
+            args: To store following args like positional arguments.
+            force_insert: To include the force insertion.
+            force_update: To include the force update.
+            using: Which db use for saving.
+            update_fields: Which fields must be updated.
+
+        Raises:
+            ValidationError: If validation for attrs_to_check failed.
+
+        """
         attrs_to_check = {
             "friendliness": self.friendliness,
             "trainability": self.trainability,
@@ -75,11 +90,15 @@ class Breed(models.Model):
         )
 
     class Meta:
+        """Meta for Breed model."""
+
         verbose_name = "Порода"
         verbose_name_plural = "Породы"
 
 
 class Dog(models.Model):
+    """Dog database model."""
+
     GENDER_CHOICES = (
         ("M", "Male"),
         ("F", "Female"),
@@ -142,6 +161,19 @@ class Dog(models.Model):
         using=None,
         update_fields=None,
     ):
+        """Save method with validation to check attributes before saving.
+
+        Args:
+            args: To store following args like positional arguments.
+            force_insert: To include the force insertion.
+            force_update: To include the force update.
+            using: Which db use for saving.
+            update_fields: Which fields must be updated.
+
+        Raises:
+            ValidationError: If validation for age failed.
+
+        """
         if self.age > 40:
             raise ValidationError("The lifespan of a dog does not exceed 40 years")
         super().save(
@@ -153,5 +185,7 @@ class Dog(models.Model):
         )
 
     class Meta:
+        """Meta for Dog model."""
+
         verbose_name = "Собака"
         verbose_name_plural = "Собаки"
